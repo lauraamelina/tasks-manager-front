@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Swal from 'sweetalert2';
 
 export default function PageLogin({ onLogin }) {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false)
@@ -15,9 +15,9 @@ export default function PageLogin({ onLogin }) {
         e.preventDefault();
         setError('')
         setLoading(true)
-        if (username && password) {
+        if (email && password) {
             try {
-                const result = await authService.login(username, password);
+                const result = await authService.login(email, password);
                 onLogin(result);
                 Swal.fire({
                     title: "Bienvenido",
@@ -31,8 +31,6 @@ export default function PageLogin({ onLogin }) {
             } catch (error) {
                 setError(error.message);
             }
-        } else {
-            setError('Invalid username or password');
         }
         setLoading(false)
     };
@@ -43,7 +41,7 @@ export default function PageLogin({ onLogin }) {
                 <h2>Iniciar Sesión</h2>
                 <form onSubmit={handleSubmit} className='card'>
                     <div className="form-floating mb-3">
-                        <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <label htmlFor="floatingInput">Email</label>
                     </div>
                     <div className="form-floating">
@@ -60,7 +58,7 @@ export default function PageLogin({ onLogin }) {
                         :
                         <button type="submit" className="btn btn-primary my-3">Ingresar</button>
                     }
-                    <Link to={'/register'} className='btn btn-secondary mb-3 text-decoration-none'>Registrarme</Link>
+                    <Link to={'/registro'} className='btn btn-secondary mb-3 text-decoration-none'>Registrarme</Link>
                 </form>
             </div>
         </main>
