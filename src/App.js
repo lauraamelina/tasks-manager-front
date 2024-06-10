@@ -19,9 +19,9 @@ function App() {
       <>
         <NavBar />
         <Routes>
-          <Route path='/' element={<PageLogin onLogin={onLogin} />} />
+          <Route path='/login' element={<PageLogin onLogin={onLogin} />} />
           <Route path='/registro' element={<PageRegister />} />
-          <Route path='*' element={<Navigate to='/' />} />
+          <Route path='/' element={<Navigate to='/login' />} />
         </Routes>
       </>
     );
