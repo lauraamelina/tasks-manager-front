@@ -183,11 +183,11 @@ h2 {
 	margin-top: 10px;
 	padding-top: 10px;
 	border-top: 1px solid #ccc;
-	transition: max-height 0.3s ease; /* Agregamos una transición para cambiar la altura */
+	transition: max-height 0.3s ease;
 	overflow: hidden;
 	max-height: 0;
 }
 
 .todo-item.expanded .task-details {
-	max-height: 100px; /* Ajusta la altura máxima según tus necesidades */
+	max-height: 100px;
 }
