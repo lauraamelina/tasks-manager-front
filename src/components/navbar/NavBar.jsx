@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faHouse, faListUl, faUser, faRightFromBracket, faUserPlus, } from '@fortawesome/free-solid-svg-icons';
 import './NavBar.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { getUser, logout } from '../../services/auth/auth.service';
+import { logout } from '../../services/auth/auth.service';
 import Swal from 'sweetalert2';
 
-export default function NavBar() {
+export default function NavBar({ authenticated, setAuthenticated }) {
     const [activeIndex, setActiveIndex] = useState(0);
-    const user = getUser();
     const navigate = useNavigate()
 
     const handleLogout = () => {
         logout();
+        setAuthenticated(false)
         Swal.fire({
             title: "Sesión cerrada correctamente",
             text: "Tu sesión se ha cerrado correctamente. ¡Hasta pronto!",
@@ -24,7 +24,7 @@ export default function NavBar() {
         });
     };
 
-    const menuItems = user ? [
+    const menuItems = authenticated ? [
         { icon: faHouse, tooltip: 'Inicio', to: '/' },
         { icon: faPlus, tooltip: 'Agregar Tarea', to: '/add' },
         { icon: faListUl, tooltip: 'Lista de Tareas', to: '/list' },
