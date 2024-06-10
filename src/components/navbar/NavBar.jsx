@@ -36,29 +36,19 @@ export default function NavBar({ authenticated, setAuthenticated }) {
         { icon: faUserPlus, tooltip: 'Registrarse', to: '/registro' },
     ];
 
-
-
     return (
         <nav className="sidebar-navigation">
             <ul>
                 {menuItems.map((item, index) => (
-                    <li
-                        key={index}
-                        className={index === activeIndex ? 'active' : ''}
-                        onClick={() => setActiveIndex(index)}
-                    >
-                        {item.onClick ? (
-                            <Link onClick={item.onClick}>
-                                <FontAwesomeIcon icon={item.icon} />
-                                <span className="tooltip">{item.tooltip}</span>
-                            </Link>
-                        ) : (
-                            <Link to={item.to}>
-                                <FontAwesomeIcon icon={item.icon} />
-                                <span className="tooltip">{item.tooltip}</span>
-                            </Link>
-                        )}
-                    </li>
+                    <Link key={index} to={item.to}>
+                        <li
+                            className={index === activeIndex ? 'active' : ''}
+                            onClick={() => setActiveIndex(index)}
+                        >
+                            <FontAwesomeIcon icon={item.icon} />
+                            <span className="tooltip">{item.tooltip}</span>
+                        </li>
+                    </Link>
                 ))}
             </ul>
         </nav>
