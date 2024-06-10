@@ -30,7 +30,48 @@ async function register(user) {
     })
 }
 
+function getToken() {
+    return localStorage.getItem('token')
+}
+
+function setToken(token) {
+    localStorage.setItem('token', token)
+}
+
+function getUser() {
+    return JSON.parse(localStorage.getItem('user'))
+}
+
+function setUser(user) {
+    localStorage.setItem('user', JSON.stringify(user))
+}
+
+function deleteUser() {
+    localStorage.removeItem('user')
+}
+
+function deleteToken() {
+    localStorage.removeItem('token')
+}
+
+function isAuth() {
+    if (getToken() && getUser()) {
+        return true
+    }
+}
+
+function logout() {
+    deleteUser()
+    deleteToken()
+}
+
 export {
     login,
-    register
+    register,
+    getToken,
+    setToken,
+    getUser,
+    setUser,
+    isAuth,
+    logout
 }
