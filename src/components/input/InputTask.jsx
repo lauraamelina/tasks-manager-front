@@ -14,9 +14,16 @@ export default function InputTask() {
         setMinDate(`${yyyy}-${mm}-${dd}`);
     }, []);
 
-    setTimeout(() => {
-        setIsLoaded(true);
-    }, 300);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoaded(true);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, []);
+
+    const handleDateChange = (e) => {
+        setMinDate(e.target.value);
+    };
 
     return (
         <div className={`input-task ${isLoaded ? 'loaded' : ''}`}>
@@ -27,13 +34,20 @@ export default function InputTask() {
                 </button>
             </div>
             <div className="bottom-section">
-                <div class="form-floating w-100">
-                    <input id='date' type="date" min={minDate} className="form-control" value={minDate} />
-                    <label for="date">Fecha de vencimiento</label>
+                <div className="form-floating w-100">
+                    <input
+                        id='date'
+                        type="date"
+                        min={minDate}
+                        className="form-control"
+                        value={minDate}
+                        onChange={handleDateChange}
+                    />
+                    <label htmlFor="date">Fecha de vencimiento</label>
                 </div>
-                <div class="form-floating w-100">
-                    <textarea class="form-control" placeholder="Descripción" id="description"></textarea>
-                    <label for="description">Descripción</label>
+                <div className="form-floating w-100">
+                    <textarea className="form-control" placeholder="Descripción" id="description"></textarea>
+                    <label htmlFor="description">Descripción</label>
                 </div>
             </div>
         </div>
