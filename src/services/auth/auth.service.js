@@ -22,7 +22,7 @@ async function register(user) {
         },
         body: JSON.stringify(user)
     }).then(res => {
-        if (res.status === 200) {
+        if (res.status === 201) {
             res.json()
         } else {
             throw new Error('Error de autenticación: la cuenta ya existe')
