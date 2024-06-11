@@ -11,6 +11,11 @@
 	--color: #ffffff;
 	--primary-color: #0f3460;
 	--primary-color-dark: #0c2a4a;
+	--background-color: #1a1a2e;
+	--text-color: #a1a1aa;
+
+	--card-background-color: rgba(255, 255, 255, 0.015);
+	--card-border-color: rgba(255, 255, 255, 0.1);
 }
 
 @import url("../fonts/sf-pro.css");
@@ -69,7 +74,7 @@ h2 {
 }
 
 .card > * {
-	width: 80%;
+	width: 90%;
 	margin: 0 auto;
 }
 
@@ -134,60 +139,46 @@ h2 {
 	transform: translateY(0);
 }
 /* TODO LIST */
-.todo-list {
-	list-style: none;
-	padding: 0;
-	display: flex;
-	flex-direction: column;
+
+.todo-list-container .card {
 	border-radius: 10px;
-}
-
-.todo-list li {
-	background-color: white;
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	padding: 1em;
-	margin: 0.5em 0;
-}
-
-.todo-item {
-	background-color: #fff;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	margin-bottom: 10px;
-	cursor: pointer;
-	padding: 10px;
-	transition: all 0.3s ease;
-}
-
-.todo-item:hover {
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.task-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.task-name {
-	font-weight: bold;
-}
-
-.task-state {
-	color: #007bff;
-}
-
-.task-details {
-	margin-top: 10px;
-	padding-top: 10px;
-	border-top: 1px solid #ccc;
-	transition: max-height 0.3s ease;
 	overflow: hidden;
-	max-height: 0;
+	color: white !important;
+	background-color: var(--card-background-color) !important;
+	border-color: var(--card-border-color) !important;
+	box-shadow: none !important;
+	max-width: 100% !important;
 }
 
-.todo-item.expanded .task-details {
-	max-height: 100px;
+.todo-list-container .card:hover {
+	box-shadow: 5px 20px 50px #000 !important;
+}
+
+.todo-list-container .text-muted {
+	color: white !important;
+}
+
+.todo-list-container .card-body {
+	padding: 0;
+}
+
+.todo-list-container .card-body .col-md-8 {
+	text-align: left !important;
+}
+
+.todo-list-container .card-body .col-md-4 {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+}
+
+.todo-list-container .card-title {
+	margin-bottom: 10px;
+	font-size: 1.3em;
+}
+
+.todo-list-container .form-select {
+	border-radius: 5px;
+	padding: 8px;
 }
