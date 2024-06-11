@@ -1,4 +1,4 @@
-import * as authService from './auth.services';
+import * as authService from '../auth/auth.service';
 
 const URL = 'https://tasks-manager-naoi.onrender.com/';
 
@@ -6,6 +6,28 @@ const URL = 'https://tasks-manager-naoi.onrender.com/';
 async function getAllTasks() {
     try {
         const response = await fetch(URL + 'task', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authService.getToken()}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error al obtener las tareas');
+        }
+    } catch (error) {
+        console.error('Hubo un problema:', error);
+        throw error;
+    }
+}
+
+// Función para obtener todas las tareas por el user_id
+async function getAllTasksByUser(idUser) {
+    try {
+        const response = await fetch(`${URL}task/user/${idUser}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${authService.getToken()}`,
@@ -143,5 +165,6 @@ export {
     getTaskById,
     updateTask,
     deleteTask,
-    changeTaskStatus
+    changeTaskStatus,
+    getAllTasksByUser
 };
