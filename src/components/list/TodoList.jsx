@@ -1,47 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faTrashAlt, faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { changeTaskStatus } from '../../services/tasks/task.service';
 
-export default function TodoList() {
-    const [expandedId, setExpandedId] = useState(null);
-
-    const handleExpand = (id) => {
-        setExpandedId(id === expandedId ? null : id);
+export default function TodoList({ tasks, states }) {
+    const handleStatusChange = async (taskId, newStatus) => {
+        try {
+            await changeTaskStatus(taskId, newStatus);
+            // Handle success (e.g., show a notification, update state)
+        } catch (error) {
+            console.error('Error changing task status:', error);
+            // Handle error (e.g., show an error notification)
+        }
     };
 
-    const tasks = [
-        { task_id: 1, status_id: "Completed", task_name: "Buy groceries for next week", description: "Descripción de la tarea 1", due_date: "28th Jun 2020", created_at: "28th Jun 2020", user_id: 1 },
-        { task_id: 2, status_id: "Active", task_name: "Renew car insurance", description: "Descripción de la tarea 2", due_date: "28th Jun 2020", created_at: "28th Jun 2020", user_id: 1 },
-        { task_id: 3, status_id: "Active", task_name: "Sign up for online course", description: "Descripción de la tarea 3", due_date: "28th Jun 2020", created_at: "28th Jun 2020", user_id: 1 }
-    ];
+    const formatDate = (dateString) => {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
 
     return (
-        <ul className="todo-list">
-            {tasks.map(task => (
-                <li className={`list-group-item ${expandedId === task.task_id ? 'expanded' : ''}`} onClick={() => handleExpand(task.task_id)} key={task.task_id}>
-                    <div className="px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
-                        <p className="lead fw-normal mb-0">{task.task_name}</p>
-                    </div>
-                    <div className="d-flex flex-row justify-content-end align-items-center">
-                        <a href="#!" className="text-primary" data-mdb-tooltip-init title="Edit todo">
-                            <FontAwesomeIcon icon={faPencilAlt} className="me-3" />
-                        </a>
-                        <a href="#!" className="text-danger" data-mdb-tooltip-init title="Delete todo">
-                            <FontAwesomeIcon icon={faTrashAlt} className="me-3" />
-                        </a>
-                    </div>
-                    <div className="text-end text-muted">
-                        {task.due_date && (
-                            <div className="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center bg-body-tertiary">
-                                <p className="small mb-0">
-                                    <FontAwesomeIcon icon={faHourglassHalf} className="me-2 text-warning" />
-                                    {task.due_date}
-                                </p>
+        <div className="todo-list-container container">
+            {tasks?.map(task => (
+                <div className="card mb-3" key={task.task_id}>
+                    <div className="card-body row">
+                        <div className='col-md-8'>
+                            <h3 className="card-title fw-bold text-truncate" title={task.task_name}>
+                                {task.task_name}
+                            </h3>
+                            <p className="card-text text-muted text-truncate" title={task.description}>
+                                {task.description}
+                            </p>
+                            <span className='card-date'>{formatDate(task.due_date)}</span>
+                        </div>
+                        <div className="col-md-4">
+                            <div>
+                                <a href="#!" className="text-primary me-4 mt-auto" title="Edit todo">
+                                    <FontAwesomeIcon icon={faPencilAlt} className="fa-lg" />
+                                </a>
+                                <a href="#!" className="text-danger mb-auto" title="Delete todo">
+                                    <FontAwesomeIcon icon={faTrashAlt} className="fa-lg" />
+                                </a>
                             </div>
-                        )}
+                            <select
+                                className="form-select"
+                                value={task.status_id}
+                                onChange={(e) => handleStatusChange(task.task_id, e.target.value)}
+                            >
+                                {states.map(state => (
+                                    <option key={state.status_id} value={state.status_id}>
+                                        {state.name}
+                                    </option>
+                                ))}
+                            </select>
+
+
+                        </div>
                     </div>
-                </li>
+                </div>
             ))}
-        </ul>
+        </div>
     );
 }
