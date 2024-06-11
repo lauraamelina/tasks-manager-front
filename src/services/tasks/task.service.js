@@ -2,15 +2,31 @@ import * as authService from '../auth/auth.service';
 
 const URL = 'https://tasks-manager-naoi.onrender.com/';
 
+// Función para realizar una solicitud con autenticación
+async function fetchWithAuth(url, options = {}) {
+    const token = authService.getToken();
+    const headers = {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+    };
+
+    const response = await fetch(url, { ...options, headers });
+
+    if (response.status === 403) {
+        authService.logout();
+        window.location.href = '/login';
+        throw new Error('Token expired');
+    }
+
+    return response;
+}
+
 // Función para obtener todas las tareas
 async function getAllTasks() {
     try {
-        const response = await fetch(URL + 'task', {
+        const response = await fetchWithAuth(URL + 'task', {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {
@@ -27,12 +43,8 @@ async function getAllTasks() {
 // Función para obtener todas las tareas por el user_id
 async function getAllTasksByUser(idUser) {
     try {
-        const response = await fetch(`${URL}task/user/${idUser}`, {
+        const response = await fetchWithAuth(`${URL}task/user/${idUser}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {
@@ -49,13 +61,9 @@ async function getAllTasksByUser(idUser) {
 // Función para crear una nueva tarea
 async function createTask(taskData) {
     try {
-        const response = await fetch(URL + 'task', {
+        const response = await fetchWithAuth(URL + 'task', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(taskData)
+            body: JSON.stringify(taskData),
         });
 
         if (response.ok) {
@@ -72,12 +80,8 @@ async function createTask(taskData) {
 // Función para obtener una tarea por su ID
 async function getTaskById(id) {
     try {
-        const response = await fetch(URL + `task/${id}`, {
+        const response = await fetchWithAuth(URL + `task/${id}`, {
             method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {
@@ -94,13 +98,9 @@ async function getTaskById(id) {
 // Función para actualizar la información de una tarea
 async function updateTask(id, updatedTaskData) {
     try {
-        const response = await fetch(URL + `task/${id}`, {
+        const response = await fetchWithAuth(URL + `task/${id}`, {
             method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedTaskData)
+            body: JSON.stringify(updatedTaskData),
         });
 
         if (response.ok) {
@@ -117,12 +117,8 @@ async function updateTask(id, updatedTaskData) {
 // Función para eliminar una tarea
 async function deleteTask(id) {
     try {
-        const response = await fetch(URL + `task/${id}`, {
+        const response = await fetchWithAuth(URL + `task/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            }
         });
 
         if (response.ok) {
@@ -139,13 +135,9 @@ async function deleteTask(id) {
 // Función para cambiar el estado de una tarea
 async function changeTaskStatus(id, newStatus) {
     try {
-        const response = await fetch(URL + `task/status/${id}`, {
+        const response = await fetchWithAuth(URL + `task/status/${id}`, {
             method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${authService.getToken()}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status: newStatus })
+            body: JSON.stringify({ status: newStatus }),
         });
 
         if (response.ok) {
@@ -166,5 +158,5 @@ export {
     updateTask,
     deleteTask,
     changeTaskStatus,
-    getAllTasksByUser
+    getAllTasksByUser,
 };
