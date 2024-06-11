@@ -45,6 +45,7 @@ function App() {
         <Route path='/' element={<HomePage />} />
         <Route path='/add' element={<PageAddTask />} />
         <Route path='/list' element={<PageListTask />} />
+        <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </>
   );
