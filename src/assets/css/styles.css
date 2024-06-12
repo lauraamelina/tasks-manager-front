@@ -70,7 +70,7 @@ h2 {
 	box-shadow: 5px 20px 50px #000;
 	max-width: 80%;
 	margin: 0.5em auto;
-	padding: 2em 0;
+	padding: 1.3em 0;
 }
 
 .card > * {
@@ -151,7 +151,7 @@ h2 {
 }
 
 .todo-list-container .card:hover {
-	box-shadow: 5px 20px 50px #000 !important;
+	box-shadow: 5px 20px 100px #00000080 !important;
 }
 
 .todo-list-container .text-muted {
@@ -162,11 +162,11 @@ h2 {
 	padding: 0;
 }
 
-.todo-list-container .card-body .col-md-8 {
+.todo-list-container .card-body .col-md-9 {
 	text-align: left !important;
 }
 
-.todo-list-container .card-body .col-md-4 {
+.todo-list-container .card-body .col-md-3 {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -175,10 +175,24 @@ h2 {
 
 .todo-list-container .card-title {
 	margin-bottom: 10px;
-	font-size: 1.3em;
+	font-size: 1.1em;
+}
+.todo-list-container .card-text {
+	font-size: 0.9em;
+	font-weight: 100 !important;
+}
+
+.todo-list-container .card-date {
+	font-size: 0.9em;
+	font-weight: 100 !important;
+}
+
+.todo-list-container .card-date span {
+	font-weight: bold;
 }
 
 .todo-list-container .form-select {
 	border-radius: 5px;
 	padding: 8px;
+	font-size: 0.9em !important;
 }
