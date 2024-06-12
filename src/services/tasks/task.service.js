@@ -137,7 +137,7 @@ async function changeTaskStatus(id, newStatus) {
     try {
         const response = await fetchWithAuth(URL + `task/status/${id}`, {
             method: 'PATCH',
-            body: JSON.stringify({ status: newStatus }),
+            body: JSON.stringify({ status_id: newStatus }),
         });
 
         if (response.ok) {
