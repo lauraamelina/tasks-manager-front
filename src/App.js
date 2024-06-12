@@ -9,6 +9,7 @@ import './assets/css/styles.css';
 import * as authService from './services/auth/auth.service';
 import { useEffect, useState } from 'react';
 import PageListTask from './pages/task/PageListTask';
+import ErrorBoundary from './utils/ErrorBoundary';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
@@ -28,18 +29,18 @@ function App() {
 
   if (!authenticated) {
     return (
-      <>
+      <ErrorBoundary>
         <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
         <Routes>
           <Route path='/login' element={<PageLogin onLogin={onLogin} />} />
           <Route path='/registro' element={<PageRegister />} />
           <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
-      </>
+      </ErrorBoundary>
     );
   }
   return (
-    <>
+    <ErrorBoundary>
       <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
       <Routes>
         <Route path='/' element={<HomePage />} />
@@ -47,7 +48,7 @@ function App() {
         <Route path='/list' element={<PageListTask />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }
 
