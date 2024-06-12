@@ -1,30 +1,31 @@
-import React from 'react';
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 
-function ErrorFallback({ error }) {
-    return (
-        <div role="alert">
-            <p>Something went wrong:</p>
-            <pre>{error.message}</pre>
-        </div>
-    );
-}
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
 
-function ErrorBoundary({ children }) {
-    return (
-        <ReactErrorBoundary
-            FallbackComponent={ErrorFallback}
-            onError={(error) => {
-                toast.error(`Error: ${error.message}`, {
-                    position: toast.POSITION.TOP_RIGHT,
-                    autoClose: 5000,
-                });
-            }}
-        >
-            {children}
-        </ReactErrorBoundary>
-    );
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        toast.error('Ocurrió un error inesperado. Por favor, intenta de nuevo más tarde.', {
+            position: toast.POSITION.TOP_RIGHT,
+            autoClose: 5000,
+        });
+        console.error("ErrorBoundary caught an error", error, errorInfo);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return <h1>Ocurrió un error inesperado.</h1>;
+        }
+
+        return this.props.children;
+    }
 }
 
 export default ErrorBoundary;
