@@ -1,4 +1,6 @@
 import * as authService from '../auth/auth.service';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const URL = 'https://tasks-manager-naoi.onrender.com/';
 
@@ -11,15 +13,27 @@ async function fetchWithAuth(url, options = {}) {
         ...options.headers,
     };
 
-    const response = await fetch(url, { ...options, headers });
+    try {
+        const response = await fetch(url, { ...options, headers });
 
-    if (response.status === 403) {
-        authService.logout();
-        window.location.href = '/login';
-        throw new Error('Token expired');
+        if (response.status === 403) {
+            authService.logout();
+            toast.error('Inicio de sesión vencido. Por favor, inicie sesión nuevamente.', {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 1000);
+        }
+
+        return response;
+    } catch (error) {
+        toast.error('Inicio de sesión vencido. Por favor, inicie sesión nuevamente.', {
+            position: 'bottom-right',
+            autoClose: 5000,
+        });
     }
-
-    return response;
 }
 
 // Función para obtener todos los estaods
@@ -31,8 +45,6 @@ async function getAllStates() {
 
         if (response.ok) {
             return response.json();
-        } else {
-            throw new Error('Error al obtener los estados');
         }
     } catch (error) {
         console.error('Hubo un problema:', error);
