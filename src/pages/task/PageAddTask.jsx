@@ -4,6 +4,7 @@ import { getAllStates } from '../../services/states/state.service'
 import { createTask } from '../../services/tasks/task.service'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 export default function PageAddTask() {
     const navigate = useNavigate()
@@ -17,7 +18,6 @@ export default function PageAddTask() {
     const handleAddTask = async (task) => {
         try {
             const response = await createTask(task);
-            console.log('Tarea:', response);
             if (response.status === true) {
                 Swal.fire({
                     icon: 'success',
@@ -34,23 +34,11 @@ export default function PageAddTask() {
                         navigate('/list')
                     }
                 });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al crear la tarea',
-                    text: 'Ha ocurrido un error al intentar crear la tarea. Por favor, inténtalo de nuevo.',
-                    confirmButtonColor: '#0f3460',
-                    confirmButtonText: 'Cerrar',
-                });
             }
         } catch (error) {
-            console.error('Error al crear la tarea:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al crear la tarea',
-                text: 'Ha ocurrido un error al intentar crear la tarea. Por favor, inténtalo de nuevo.',
-                confirmButtonColor: '#0f3460',
-                confirmButtonText: 'Cerrar',
+            toast.error(error.message, {
+                position: 'bottom-right',
+                autoClose: 5000,
             });
         }
     };
