@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faHouse, faListUl, faUser, faRightFromBracket, faUserPlus, } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faHouse, faListUl, faUser, faRightFromBracket, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import './NavBar.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../services/auth/auth.service';
@@ -8,11 +8,11 @@ import Swal from 'sweetalert2';
 
 export default function NavBar({ authenticated, setAuthenticated }) {
     const [activeIndex, setActiveIndex] = useState(0);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
-        setAuthenticated(false)
+        setAuthenticated(false);
         Swal.fire({
             title: "Sesión cerrada correctamente",
             text: "Tu sesión se ha cerrado correctamente. ¡Hasta pronto!",
@@ -40,15 +40,29 @@ export default function NavBar({ authenticated, setAuthenticated }) {
         <nav className="sidebar-navigation">
             <ul>
                 {menuItems.map((item, index) => (
-                    <Link key={index} to={item.to}>
+                    item.onClick ? (
                         <li
+                            key={index}
                             className={index === activeIndex ? 'active' : ''}
-                            onClick={() => setActiveIndex(index)}
+                            onClick={() => {
+                                item.onClick();
+                                setActiveIndex(index);
+                            }}
                         >
                             <FontAwesomeIcon icon={item.icon} />
                             <span className="tooltip">{item.tooltip}</span>
                         </li>
-                    </Link>
+                    ) : (
+                        <Link key={index} to={item.to}>
+                            <li
+                                className={index === activeIndex ? 'active' : ''}
+                                onClick={() => setActiveIndex(index)}
+                            >
+                                <FontAwesomeIcon icon={item.icon} />
+                                <span className="tooltip">{item.tooltip}</span>
+                            </li>
+                        </Link>
+                    )
                 ))}
             </ul>
         </nav>
