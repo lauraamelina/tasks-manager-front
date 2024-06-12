@@ -3,17 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as authService from '../../services/auth/auth.service'
 import CircularProgress from '@mui/material/CircularProgress';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 export default function PageLogin({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('')
         setLoading(true)
         if (email && password) {
             try {
@@ -29,7 +28,10 @@ export default function PageLogin({ onLogin }) {
                     }
                 });
             } catch (error) {
-                setError(error.message);
+                toast.error(error.message, {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                });
             }
         }
         setLoading(false)
@@ -48,11 +50,6 @@ export default function PageLogin({ onLogin }) {
                         <input type="password" className="form-control" id="floatingPassword" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <label htmlFor="floatingPassword">Contraseña</label>
                     </div>
-                    {error &&
-                        <div className="alert alert-danger mt-3" role="alert">
-                            {error}
-                        </div>
-                    }
                     {loading ?
                         <button className="btn btn-primary my-3"><CircularProgress /></button>
                         :
