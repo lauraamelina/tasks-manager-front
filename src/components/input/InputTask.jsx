@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { getUser } from '../../services/auth/auth.service';
+import { toast } from 'react-toastify';
 
 export default function InputTask({ states, handleAddTask }) {
     const [task_name, setTaskName] = useState('');
@@ -11,7 +12,6 @@ export default function InputTask({ states, handleAddTask }) {
     const [due_date, setDueDate] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('1');
     const [isLoaded, setIsLoaded] = useState(false);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const today = new Date();
@@ -34,10 +34,11 @@ export default function InputTask({ states, handleAddTask }) {
     };
 
     const handleCreate = () => {
-        setError('')
         if (!task_name) {
-            setError('Completar el nombre de la tarea')
-
+            toast.error('Completar el nombre de la tarea', {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
         } else {
             const newTask = {
                 user_id: user_id,
@@ -98,9 +99,6 @@ export default function InputTask({ states, handleAddTask }) {
                 </div>
 
             </div>
-            {error &&
-                <div className="alert alert-danger alert-fixed" role="alert">{error}</div>
-            }
         </div>
     );
 }
