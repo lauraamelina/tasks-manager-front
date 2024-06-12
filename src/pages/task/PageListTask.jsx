@@ -6,6 +6,7 @@ import { CircularProgress } from '@mui/material';
 import { getAllStates } from '../../services/states/state.service';
 import { Link } from 'react-router-dom';
 import { changeTaskStatus } from '../../services/tasks/task.service';
+import { toast } from 'react-toastify';
 
 export default function PageListTask() {
     const [tasks, setTasks] = useState([]);
@@ -30,8 +31,10 @@ export default function PageListTask() {
             const updatedTasks = await taskService.getAllTasksByUser(user?.id);
             setTasks(updatedTasks.data);
         } catch (error) {
-            console.error('Error changing task status:', error);
-            // Maneja el error (e.g., muestra una notificación de error)
+            toast.error(error.message, {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
         } finally {
             setLoadingTaskId(null); // Resetea el estado de carga específica
         }
