@@ -8,6 +8,7 @@ import { getAllStates } from '../../services/states/state.service';
 import { Link } from 'react-router-dom';
 import { changeTaskStatus } from '../../services/tasks/task.service';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 export default function PageListTask() {
     const [tasks, setTasks] = useState([]);
@@ -92,6 +93,30 @@ export default function PageListTask() {
         }
     };
 
+    const handleDeleteTask = async (taskId) => {
+        try {
+            const response = await taskService.deleteTask(taskId);
+            if (response.status === true) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Tarea borrada!',
+                    confirmButtonColor: '#0f3460',
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const updatedTasks = await taskService.getAllTasksByUser(user?.id);
+                        setTasks(updatedTasks.data);
+                        handleSearch({ searchTerm: '', selectedStatuses, sortOrder });
+                    }
+                });
+            }
+        } catch (error) {
+            toast.error(error.message, {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
+        }
+    };
+
     return (
         <main>
             <h1>Task Manager</h1>
@@ -119,6 +144,7 @@ export default function PageListTask() {
                             states={states}
                             handleStatusChange={handleStatusChange}
                             loadingTaskId={loadingTaskId}
+                            handleDeleteTask={handleDeleteTask}
                         />
                     </div>
                 </>
