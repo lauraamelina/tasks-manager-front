@@ -2,13 +2,32 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { CircularProgress } from '@mui/material';
+import Swal from 'sweetalert2';
 
-export default function TodoList({ tasks, states, handleStatusChange, loadingTaskId }) {
+export default function TodoList({ tasks, states, handleStatusChange, loadingTaskId, handleDeleteTask }) {
 
     const formatDate = (dateString) => {
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
+
+    const confirmDelete = (id) => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'No podrás revertir esto!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, quiero borrarlo!',
+            confirmButtonColor: "#0f3460",
+            cancelButtonText: 'No, cancelar',
+            cancelButtonColor: '#d33',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleDeleteTask(id);
+            }
+        });
+
+    }
 
     const getBadgeType = (dueDate) => {
         const today = new Date();
@@ -47,10 +66,10 @@ export default function TodoList({ tasks, states, handleStatusChange, loadingTas
                         </div>
                         <div className="col-md-3">
                             <div>
-                                <a href="#!" className="text-primary me-4 mt-auto" title="Edit todo">
+                                <a href="#!" className="icon-button text-primary me-4 mt-auto" title="Editar tarea">
                                     <FontAwesomeIcon icon={faPencilAlt} className="fa-lg" />
                                 </a>
-                                <a href="#!" className="text-danger mb-auto" title="Delete todo">
+                                <a href="#!" onClick={() => confirmDelete(task.task_id)} className="icon-button text-danger mb-auto" title="Borrar tarea">
                                     <FontAwesomeIcon icon={faTrashAlt} className="fa-lg" />
                                 </a>
                             </div>
