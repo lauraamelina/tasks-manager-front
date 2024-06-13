@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import TodoList from '../../components/list/TodoList';
+import SearchFilter from '../../components/search/SearchFilter';
 import * as taskService from '../../services/tasks/task.service';
 import * as authService from '../../services/auth/auth.service';
 import { CircularProgress } from '@mui/material';
@@ -10,19 +11,69 @@ import { toast } from 'react-toastify';
 
 export default function PageListTask() {
     const [tasks, setTasks] = useState([]);
+    const [filteredTasks, setFilteredTasks] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [loadingTaskId, setLoadingTaskId] = useState(null); // Nuevo estado
+    const [loadingTaskId, setLoadingTaskId] = useState(null);
     const [user] = useState(authService.getUser());
     const [states, setStates] = useState([]);
+    const [selectedStatuses, setSelectedStatuses] = useState([]);
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [sortBy, setSortBy] = useState('due_date');
+
+    const handleSearch = useCallback(({ searchTerm, selectedStatuses, sortOrder, sortBy }) => {
+        let filtered = [...tasks];
+
+        if (searchTerm) {
+            filtered = filtered.filter(task =>
+                task.task_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                task.description.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+
+        if (selectedStatuses && selectedStatuses.length > 0) {
+            filtered = filtered.filter(task => selectedStatuses.includes(task.status_id));
+        }
+
+        filtered = filtered.sort((a, b) => {
+            const dateA = new Date(a[sortBy]);
+            const dateB = new Date(b[sortBy]);
+            if (sortOrder === 'asc') {
+                return dateA - dateB;
+            } else {
+                return dateB - dateA;
+            }
+        });
+
+        setFilteredTasks(filtered);
+    }, [tasks]);
 
     useEffect(() => {
-        setLoading(true);
-        Promise.all([
-            getAllStates().then(res => setStates(res.data)),
-            taskService.getAllTasksByUser(user?.id).then(res => setTasks(res.data))
-        ]).then(() => setLoading(false));
-        // eslint-disable-next-line
-    }, []);
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const [statesResponse, tasksResponse] = await Promise.all([
+                    getAllStates(),
+                    taskService.getAllTasksByUser(user?.id)
+                ]);
+                setStates(statesResponse.data);
+                setTasks(tasksResponse.data);
+                setFilteredTasks(tasksResponse.data);
+            } catch (error) {
+                toast.error(error.message, {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [user]);
+
+    useEffect(() => {
+        handleSearch({ searchTerm: '', selectedStatuses, sortOrder, sortBy });
+    }, [tasks, selectedStatuses, sortOrder, sortBy, handleSearch]);
 
     const handleStatusChange = async (taskId, newStatus) => {
         setLoadingTaskId(taskId);
@@ -30,13 +81,14 @@ export default function PageListTask() {
             await changeTaskStatus(taskId, newStatus);
             const updatedTasks = await taskService.getAllTasksByUser(user?.id);
             setTasks(updatedTasks.data);
+            handleSearch({ searchTerm: '', selectedStatuses, sortOrder, sortBy });
         } catch (error) {
             toast.error(error.message, {
                 position: 'bottom-right',
                 autoClose: 5000,
             });
         } finally {
-            setLoadingTaskId(null); // Resetea el estado de carga específica
+            setLoadingTaskId(null);
         }
     };
 
@@ -44,6 +96,13 @@ export default function PageListTask() {
         <main>
             <h1>Task Manager</h1>
             <h2 className='fs-5'>Lista de tareas</h2>
+            <SearchFilter
+                states={states}
+                onSearch={handleSearch}
+                setSelectedStatuses={setSelectedStatuses}
+                setSortOrder={setSortOrder}
+                setSortBy={setSortBy}
+            />
             {tasks.length === 0 && !loading &&
                 (<div>
                     <p>No hay tareas</p>
@@ -53,7 +112,7 @@ export default function PageListTask() {
             {loading ? <CircularProgress className='mt-5' /> :
                 (<div className="card">
                     <TodoList
-                        tasks={tasks}
+                        tasks={filteredTasks}
                         states={states}
                         handleStatusChange={handleStatusChange}
                         loadingTaskId={loadingTaskId}
