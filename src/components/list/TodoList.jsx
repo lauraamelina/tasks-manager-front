@@ -10,6 +10,26 @@ export default function TodoList({ tasks, states, handleStatusChange, loadingTas
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
+    const getBadgeType = (dueDate) => {
+        const today = new Date();
+        const taskDueDate = new Date(dueDate);
+        const differenceInDays = Math.ceil((taskDueDate - today) / (1000 * 60 * 60 * 24));
+
+        if (differenceInDays < 0) {
+            // Tarea vencida
+            return <span className="badge bg-danger">Vencido</span>;
+        } else if (differenceInDays === 0) {
+            // Tarea vence hoy
+            return <span className="badge bg-warning">Vence hoy</span>;
+        } else if (differenceInDays === 1) {
+            // Tarea vence mañana
+            return <span className="badge bg-warning">Vence mañana</span>;
+        } else {
+            // Tarea no vencida
+            return <span className="badge bg-success">Vence en {differenceInDays} días</span>;
+        }
+    };
+
     return (
         <div className="todo-list-container container">
             {tasks?.map(task => (
@@ -22,7 +42,8 @@ export default function TodoList({ tasks, states, handleStatusChange, loadingTas
                             <p className="card-text text-muted text-truncate" title={task.description}>
                                 {task.description}
                             </p>
-                            <span className='card-date'>Vencimiento: <span>{formatDate(task.due_date)}</span></span>
+                            <span className='card-date'>Vencimiento: <span className='me-2'>{formatDate(task.due_date)}</span></span>
+                            {getBadgeType(task.due_date)}
                         </div>
                         <div className="col-md-3">
                             <div>
