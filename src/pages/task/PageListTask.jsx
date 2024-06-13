@@ -96,29 +96,33 @@ export default function PageListTask() {
         <main>
             <h1>Task Manager</h1>
             <h2 className='fs-5'>Lista de tareas</h2>
-            <SearchFilter
-                states={states}
-                onSearch={handleSearch}
-                setSelectedStatuses={setSelectedStatuses}
-                setSortOrder={setSortOrder}
-                setSortBy={setSortBy}
-            />
+
             {tasks.length === 0 && !loading &&
-                (<div>
-                    <p>No hay tareas</p>
-                    <Link to={'/add'} className='btn btn-primary'>Agregar tarea</Link>
+                (<div className='mt-5'>
+                    <p className='h-4'>No hay tareas</p>
+                    <Link to={'/add'} className='btn btn-primary text-decoration-none'>Agregar tarea</Link>
                 </div>)
             }
-            {loading ? <CircularProgress className='mt-5' /> :
-                (<div className="card">
-                    <TodoList
-                        tasks={filteredTasks}
+            {loading && <CircularProgress className='mt-5' />}
+            {tasks.length !== 0 && !loading &&
+                (<>
+                    <SearchFilter
                         states={states}
-                        handleStatusChange={handleStatusChange}
-                        loadingTaskId={loadingTaskId}
+                        onSearch={handleSearch}
+                        setSelectedStatuses={setSelectedStatuses}
+                        setSortOrder={setSortOrder}
+                        setSortBy={setSortBy}
                     />
-                </div>)
-            }
+                    <div className="card">
+                        <TodoList
+                            tasks={filteredTasks}
+                            states={states}
+                            handleStatusChange={handleStatusChange}
+                            loadingTaskId={loadingTaskId}
+                        />
+                    </div>
+                </>
+                )}
         </main>
     );
 }
