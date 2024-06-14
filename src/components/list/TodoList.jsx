@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { CircularProgress } from '@mui/material';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom';
 
 export default function TodoList({ tasks, states, handleStatusChange, loadingTaskId, handleDeleteTask }) {
 
@@ -66,9 +67,9 @@ export default function TodoList({ tasks, states, handleStatusChange, loadingTas
                         </div>
                         <div className="col-md-3">
                             <div>
-                                <a href="#!" className="icon-button text-primary me-4 mt-auto" title="Editar tarea">
+                                <Link to={'/list/' + task.task_id} className="icon-button text-primary me-4 mt-auto" title="Editar tarea">
                                     <FontAwesomeIcon icon={faPencilAlt} className="fa-lg" />
-                                </a>
+                                </Link>
                                 <a href="#!" onClick={() => confirmDelete(task.task_id)} className="icon-button text-danger mb-auto" title="Borrar tarea">
                                     <FontAwesomeIcon icon={faTrashAlt} className="fa-lg" />
                                 </a>
