@@ -7,9 +7,13 @@ import { Link } from 'react-router-dom';
 
 export default function TodoList({ tasks, states, handleStatusChange, loadingTaskId, handleDeleteTask }) {
 
+
     const formatDate = (dateString) => {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        return new Date(dateString).toLocaleDateString(undefined, options);
+        const date = new Date(dateString);
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const year = date.getUTCFullYear();
+        return `${day}/${month}/${year}`;
     };
 
     const confirmDelete = (id) => {
