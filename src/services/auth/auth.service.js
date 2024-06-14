@@ -34,8 +34,11 @@ function getToken() {
     return localStorage.getItem('token')
 }
 
+
 function setToken(token) {
-    localStorage.setItem('token', token)
+    const tokenExpiration = new Date().getTime() + (60 * 60 * 1000);
+    localStorage.setItem('token', token);
+    localStorage.setItem('tokenExpiration', tokenExpiration);
 }
 
 function getUser() {
@@ -65,6 +68,16 @@ function logout() {
     deleteToken()
 }
 
+function isTokenExpired() {
+    const tokenExpiration = localStorage.getItem('tokenExpiration');
+    if (!tokenExpiration) {
+        return true;
+    }
+    return new Date().getTime() > tokenExpiration;
+}
+
+
+
 export {
     login,
     register,
@@ -73,5 +86,6 @@ export {
     getUser,
     setUser,
     isAuth,
-    logout
+    logout,
+    isTokenExpired
 }
