@@ -24,7 +24,7 @@ function App() {
       setAuthenticated(true);
     } else {
       authService.logout();
-      toast.error('Your session has expired. Please log in again.', {
+      toast.error('Tu sesión expiró. Por favor iniciá sesión nuevamente.', {
         position: 'bottom-right',
         autoClose: 5000,
         onClose: () => navigate('/login')
