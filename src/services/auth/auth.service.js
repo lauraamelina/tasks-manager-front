@@ -4,7 +4,6 @@ async function login(email, password) {
     return fetch(URL + 'users/login', {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${getToken()}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password })
@@ -31,10 +30,11 @@ async function register(user) {
     })
 }
 
-function updateUser(id, user) {
+async function updateUser(id, user) {
     return fetch(URL + 'users/' + id, {
         method: 'PUT',
         headers: {
+            'Authorization': `Bearer ${getToken()}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
