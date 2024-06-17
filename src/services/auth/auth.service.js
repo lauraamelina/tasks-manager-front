@@ -4,6 +4,7 @@ async function login(email, password) {
     return fetch(URL + 'users/login', {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${getToken()}`,
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password })
