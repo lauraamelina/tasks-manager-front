@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function PageProfile() {
-    const [user] = useState(getUser())
+    const [user, setUser] = useState(getUser())
     const [editedUser, setEditedUser] = useState(user)
     const [isEdited, setIsEdited] = useState(false)
 
@@ -18,7 +18,19 @@ export default function PageProfile() {
     }
 
     const handleSave = async () => {
-
+        try {
+            await updateUser(user.id, editedUser);
+            toast.success('Tarea actualizada correctamente', {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
+            setUser(editedUser);
+        } catch (error) {
+            toast.error('Error al actualizar el perfil', {
+                position: 'bottom-right',
+                autoClose: 5000,
+            });
+        }
     }
 
     return (
