@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getUser } from '../../services/auth/auth.service'
+import { getUser, updateUser } from '../../services/auth/auth.service'
 import { Link } from 'react-router-dom'
 
 export default function PageProfile() {
@@ -16,8 +16,8 @@ export default function PageProfile() {
         setIsEdited(true);
     }
 
-    const handleSave = (e) => {
-        console.log(editedUser)
+    const handleSave = async () => {
+
     }
 
     return (
