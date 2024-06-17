@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { getUser, updateUser } from '../../services/auth/auth.service'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export default function PageProfile() {
     const [user] = useState(getUser())
