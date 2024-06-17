@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { getUser, updateUser } from '../../services/auth/auth.service'
+import { getUser, updateUser, setUser } from '../../services/auth/auth.service'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export default function PageProfile() {
-    const [user, setUser] = useState(getUser())
+    const [user, setUserP] = useState(getUser())
     const [editedUser, setEditedUser] = useState(user)
     const [isEdited, setIsEdited] = useState(false)
 
@@ -20,10 +20,11 @@ export default function PageProfile() {
     const handleSave = async () => {
         try {
             await updateUser(user.id, editedUser);
-            toast.success('Tarea actualizada correctamente', {
+            toast.success('Perfil actualizado correctamente', {
                 position: 'bottom-right',
                 autoClose: 5000,
             });
+            setUserP(editedUser);
             setUser(editedUser);
         } catch (error) {
             toast.error('Error al actualizar el perfil', {
@@ -39,11 +40,11 @@ export default function PageProfile() {
             <div className="card profile">
                 <div>
                     <div className="form-floating mb-3">
-                        <input type="name" className="form-control" id="floatingName" defaultValue={user?.name} onChange={handleChange} />
+                        <input type="text" className="form-control" name='name' id="floatingName" defaultValue={user?.name} onChange={handleChange} />
                         <label htmlFor="floatingName">Nombre</label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="email" className="form-control" id="floatingemail" defaultValue={user?.email} onChange={handleChange} />
+                        <input type="email" className="form-control" name='email' id="floatingemail" defaultValue={user?.email} onChange={handleChange} />
                         <label htmlFor="floatingemail">Email</label>
                     </div>
                     <Link className="btn btn-secondary" to={'/list'} >
