@@ -10,6 +10,7 @@ import * as authService from './services/auth/auth.service';
 import { useEffect, useState } from 'react';
 import PageListTask from './pages/task/PageListTask';
 import PageTaskById from './pages/task/PageTaskById';
+import PageProfile from './pages/profile/PageProfile';
 import ErrorBoundary from './utils/ErrorBoundary';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -57,6 +58,7 @@ function App() {
         <Route path='/add' element={<PageAddTask />} />
         <Route path='/list' element={<PageListTask />} />
         <Route path='/list/:id' element={<PageTaskById />} />
+        <Route path='/perfil' element={<PageProfile />} />
         <Route path='*' element={<Navigate to='/' />} />
       </Routes>
     </ErrorBoundary>
