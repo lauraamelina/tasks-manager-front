@@ -30,6 +30,22 @@ async function register(user) {
     })
 }
 
+function updateUser(id, user) {
+    return fetch(URL + 'users/' + id, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    }).then(res => {
+        if (res.status === 200) {
+            res.json()
+        } else {
+            throw new Error('Error al actualizar el perfil')
+        }
+    })
+}
+
 function getToken() {
     return localStorage.getItem('token')
 }
@@ -78,6 +94,8 @@ function isTokenExpired() {
 
 
 
+
+
 export {
     login,
     register,
@@ -87,5 +105,6 @@ export {
     setUser,
     isAuth,
     logout,
-    isTokenExpired
+    isTokenExpired,
+    updateUser
 }
