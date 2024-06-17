@@ -9,8 +9,8 @@ export default function PageProfile() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedUser(prevTask => ({
-            ...prevTask,
+        setEditedUser(prevUser => ({
+            ...prevUser,
             [name]: value,
         }));
         setIsEdited(true);
@@ -30,7 +30,7 @@ export default function PageProfile() {
                         <label htmlFor="floatingName">Nombre</label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="email" className="form-control" id="floatingemail" defaultValue={user?.email} disabled />
+                        <input type="email" className="form-control" id="floatingemail" defaultValue={user?.email} onChange={handleChange} />
                         <label htmlFor="floatingemail">Email</label>
                     </div>
                     <Link className="btn btn-secondary" to={'/list'} >
