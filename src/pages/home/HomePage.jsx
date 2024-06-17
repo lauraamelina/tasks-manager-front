@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { getAllTasksByUser } from '../../services/tasks/task.service'
 import { getAllStates } from '../../services/states/state.service'
-import CardHome from '../../components/home/CardHome'
 import { getUser } from '../../services/auth/auth.service'
 import { toast } from 'react-toastify'
+import { CircularProgress } from '@mui/material'
 
 export default function HomePage() {
     const [user] = useState(getUser())
@@ -45,6 +45,7 @@ export default function HomePage() {
         <main>
             <h1>Task Manager</h1>
             <p>Bienvenido!</p>
+            {loading && <CircularProgress className='mt-5' />}
         </main>
     )
 }
