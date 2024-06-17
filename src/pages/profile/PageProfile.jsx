@@ -1,22 +1,49 @@
 import React, { useState } from 'react'
 import { getUser } from '../../services/auth/auth.service'
+import { Link } from 'react-router-dom'
 
 export default function PageProfile() {
     const [user] = useState(getUser())
+    const [editedUser, setEditedUser] = useState(user)
+    const [isEdited, setIsEdited] = useState(false)
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setEditedUser(prevTask => ({
+            ...prevTask,
+            [name]: value,
+        }));
+        setIsEdited(true);
+    }
+
+    const handleSave = (e) => {
+        console.log(editedUser)
+    }
+
     return (
         <main>
             <h1>Task Manager</h1>
             <div className="card profile">
-                <form action="">
+                <div>
                     <div className="form-floating mb-3">
-                        <input type="name" className="form-control" id="floatingName" defaultValue={user?.name} />
+                        <input type="name" className="form-control" id="floatingName" defaultValue={user?.name} onChange={handleChange} />
                         <label htmlFor="floatingName">Nombre</label>
                     </div>
                     <div className="form-floating mb-3">
-                        <input type="email" className="form-control" id="floatingemail" defaultValue={user?.email} />
+                        <input type="email" className="form-control" id="floatingemail" defaultValue={user?.email} disabled />
                         <label htmlFor="floatingemail">Email</label>
                     </div>
-                </form>
+                    <Link className="btn btn-secondary" to={'/list'} >
+                        Volver
+                    </Link>
+                    <button
+                        className="btn btn-primary ms-3"
+                        onClick={handleSave}
+                        disabled={!isEdited}
+                    >
+                        Guardar cambios
+                    </button>
+                </div>
 
             </div>
         </main>
