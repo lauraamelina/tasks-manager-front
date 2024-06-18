@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faHouse, faListUl, faUser, faRightFromBracket, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import './NavBar.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logout } from '../../services/auth/auth.service';
 import Swal from 'sweetalert2';
 
 export default function NavBar({ authenticated, setAuthenticated }) {
-    const [activeIndex, setActiveIndex] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleLogout = () => {
         logout();
@@ -43,10 +43,9 @@ export default function NavBar({ authenticated, setAuthenticated }) {
                     item.onClick ? (
                         <li
                             key={index}
-                            className={index === activeIndex ? 'active' : ''}
+                            className={location.pathname === item.to ? 'active' : ''}
                             onClick={() => {
                                 item.onClick();
-                                setActiveIndex(index);
                             }}
                         >
                             <FontAwesomeIcon icon={item.icon} />
@@ -55,8 +54,7 @@ export default function NavBar({ authenticated, setAuthenticated }) {
                     ) : (
                         <Link key={index} to={item.to}>
                             <li
-                                className={index === activeIndex ? 'active' : ''}
-                                onClick={() => setActiveIndex(index)}
+                                className={location.pathname === item.to ? 'active' : ''}
                             >
                                 <FontAwesomeIcon icon={item.icon} />
                                 <span className="tooltip">{item.tooltip}</span>
