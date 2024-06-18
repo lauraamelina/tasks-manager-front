@@ -46,10 +46,6 @@ export default function HomePage() {
         }
     };
 
-    useEffect(() => {
-        console.log(tasks);
-    }, [tasks]);
-
     return (
         <main className='dashboard container'>
             <h1>Task Manager</h1>

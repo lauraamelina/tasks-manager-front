@@ -17,8 +17,7 @@ export default function PageRegister() {
         setLoading(true)
         if (username && password && name) {
             try {
-                const result = await authService.register({ email: username, password, name });
-                console.log(result)
+                await authService.register({ email: username, password, name });
                 Swal.fire({
                     title: "Bienvenido ",
                     text: "Registro correcto",
