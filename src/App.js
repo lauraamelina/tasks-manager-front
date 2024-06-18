@@ -12,30 +12,38 @@ import PageListTask from './pages/task/PageListTask';
 import PageTaskById from './pages/task/PageTaskById';
 import PageProfile from './pages/profile/PageProfile';
 import ErrorBoundary from './utils/ErrorBoundary';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const user = authService.getUser();
-    if (user && !authService.isTokenExpired()) {
+    const tokenExpired = authService.isTokenExpired();
+
+    if (user && !tokenExpired) {
       setAuthenticated(true);
     } else {
+      setAuthenticated(false);
       authService.logout();
-      toast.error('Tu sesión expiró. Por favor iniciá sesión nuevamente.', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        onClose: () => navigate('/login')
-      });
+      if (!location.pathname.includes('/registro')) {
+        toast.error('Tu sesión expiró. Por favor iniciá sesión nuevamente.', {
+          position: 'bottom-right',
+          autoClose: 5000,
+          onClose: () => navigate('/login')
+        });
+      }
     }
-  }, [navigate]);
-  function onLogin(result) {
+  }, [navigate, location.pathname]);
+
+  function handleLogin(result) {
     authService.setToken(result.token);
     authService.setUser(result.user);
     setAuthenticated(true);
+    navigate('/');
   }
 
   if (!authenticated) {
@@ -43,13 +51,14 @@ function App() {
       <ErrorBoundary>
         <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
         <Routes>
-          <Route path='/login' element={<PageLogin onLogin={onLogin} />} />
-          <Route path='/registro' element={<PageRegister />} />
+          <Route path='/login' element={<PageLogin onLogin={handleLogin} />} />
+          <Route path='/registro' element={<PageRegister onRegister={handleLogin} />} />
           <Route path='*' element={<Navigate to='/login' />} />
         </Routes>
       </ErrorBoundary>
     );
   }
+
   return (
     <ErrorBoundary>
       <NavBar authenticated={authenticated} setAuthenticated={setAuthenticated} />
