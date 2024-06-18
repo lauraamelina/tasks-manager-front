@@ -201,3 +201,21 @@ h2 {
 .profile {
 	color: white;
 }
+
+@media (max-width: 767px) {
+	.card {
+		max-width: 95%;
+	}
+
+	.search-filter .checkbox-select {
+		flex-direction: column;
+	}
+
+	.todo-list-container .card-body .col-md-3 div {
+		margin: 1em 0 0.3em 0;
+	}
+
+	.todo-list-container .card-body .col-md-9 {
+		text-align: center !important;
+	}
+}
