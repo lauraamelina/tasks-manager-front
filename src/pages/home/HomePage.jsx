@@ -55,7 +55,7 @@ export default function HomePage() {
             }
             {loading && <CircularProgress className='mt-5' />}
             {tasks.length !== 0 && !loading && (
-                <div className='row'>
+                <div className='row justify-content-center'>
                     <div className='col-md-6 mb-3 mb-md-5'>
                         <BarChartTasksByStatus tasks={tasks} states={states} />
                     </div>
