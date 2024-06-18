@@ -29,7 +29,7 @@ function App() {
     } else {
       setAuthenticated(false);
       authService.logout();
-      if (!location.pathname.includes('/registro')) {
+      if (!location.pathname.includes('/login') && !location.pathname.includes('/registro')) {
         toast.error('Tu sesión expiró. Por favor iniciá sesión nuevamente.', {
           position: 'bottom-right',
           autoClose: 5000,
